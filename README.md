@@ -1,6 +1,6 @@
 # 🤖 Spiker-PyBrinks - CNATMAKER Bot
 
-Biblioteca completa e didática para programar **LEGO SPIKE Prime**.
+Biblioteca completa e didática para programar **LEGO SPIKE Prime** no VSCode.
 
 > Para uso educacional de 10 a 60+ anos
 
