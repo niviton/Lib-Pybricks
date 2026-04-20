@@ -1,26 +1,23 @@
-"""R6 - Jogador 1"""
+"""R6 - Jogo 2 jogadores (Hub 1)"""
 
 from pybricks.parameters import Color
 from pybricks.tools import wait, StopWatch
 from lib.CNATMake_lib import CNATMAKER_Bot
 
 robo = CNATMAKER_Bot()
-
-input("Pressione ENTER para começar...")
-
-robo.luz_local(Color.YELLOW)
-robo.beep_local(800, 100)
+robo.esperar_botao()
+robo.atuador.led.cor(Color.YELLOW)
+robo.atuador.som.beep(frequencia=800, duracao=100)
 
 timer = StopWatch()
 contador = 0
-tempo_limite = 10000
-
-while timer.time() < tempo_limite:
-    if robo.botao_pressionado_local():
+while timer.time() < 10000:
+    if robo.hub.botao.pressionado():
         contador += 1
-        robo.enviar_ble("botao", contador, timer.time())
-        robo.beep_local(1000, 100)
-        wait(300)
+        robo.enviar_ble("placar_h1", contador)
+        robo.atuador.som.beep(frequencia=1000, duracao=80)
+        wait(250)
+    wait(20)
 
-tempo_final = timer.time() / 1000.0
-robo.luz_local(Color.GREEN)
+robo.atuador.led.cor(Color.GREEN)
+print("Pontos H1:", contador)

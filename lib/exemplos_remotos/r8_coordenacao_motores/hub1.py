@@ -1,25 +1,24 @@
-"""R8 - Maestro de sincronização"""
+"""R8 - Coordenacao de 2 motores remotos por porta"""
 
 from pybricks.parameters import Color
 from pybricks.tools import wait
-
 from lib.CNATMake_lib import CNATMAKER_Bot
 
 robo = CNATMAKER_Bot()
+robo.atuador.led.cor(Color.YELLOW)
 
-robo.luz_local(Color.YELLOW)
+robo.hub_configurar_portas([
+    ("A2", "motor"),
+    ("B2", "motor"),
+])
 
-movimentos = [
-    ("gira_direita", 180, 500),
-    ("gira_esquerda", 180, 500),
-    ("avancar", 10, 300),
-    ("recuar", 10, 300),
-    ("pausa", 2, 0),
-]
+robo.atuador.movimento.configurar(esq="A2", dir="B2", cm_por_rotacao=17.5)
+robo.atuador.movimento.mover(sentido="frente", cm=20, potencia=75)
+wait(600)
+robo.atuador.movimento.girar(sentido="direita", graus=90, potencia=75)
+wait(600)
+robo.atuador.movimento.arrancar(sentido="tras", potencia=65)
+wait(900)
+robo.atuador.movimento.parar()
 
-for idx, (tipo, valor, velocidade) in enumerate(movimentos):
-    robo.enviar_ble(tipo, valor, velocidade)
-    robo.beep_local(800, 100)
-    wait(2000)
-
-robo.luz_local(Color.GREEN)
+robo.atuador.led.cor(Color.GREEN)

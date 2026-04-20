@@ -1,4 +1,4 @@
-"""EXEMPLO 1: LED e Som"""
+"""EXEMPLO 1: LED, Som e Display (API nova)"""
 
 from pybricks.parameters import Color
 from pybricks.tools import wait
@@ -6,30 +6,18 @@ from lib.CNATMake_lib import CNATMAKER_Bot
 
 robo = CNATMAKER_Bot()
 
-# Sequência de cores
-wait(500)
-robo.luz_local(Color.RED)
-wait(500)
-robo.luz_local(Color.GREEN)
-wait(500)
-robo.luz_local(Color.BLUE)
-wait(500)
-robo.luz_local(Color.BLACK)
+for cor in (Color.RED, Color.GREEN, Color.BLUE, Color.WHITE, Color.BLACK):
+	robo.atuador.led.cor(cor)
+	wait(400)
 
-# Tocar sons
-robo.beep_local(262, 200)
-wait(300)
-robo.beep_local(294, 200)
-wait(300)
-robo.beep_local(330, 200)
-wait(300)
-robo.beep_local(349, 200)
+for freq in (262, 294, 330, 349):
+	robo.atuador.som.beep(frequencia=freq, duracao=180)
+	wait(250)
 
-# Mostrar no display
-robo.mostrar_local("H")
-wait(1000)
-robo.mostrar_local("I")
-wait(1000)
-robo.limpar_display_local()
+robo.atuador.display.mostrar("N")
+wait(600)
+robo.atuador.display.mostrar("W")
+wait(600)
+robo.limpar_display()
 
-print("✓ Concluído")
+print("✓ Exemplo 1 finalizado")

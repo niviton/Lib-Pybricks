@@ -1,27 +1,17 @@
-"""R7 - Provedor distribuído"""
+"""R7 - Hub 2 multiplexador automatico"""
 
-from pybricks.parameters import Port, Color
+from pybricks.parameters import Color
 from pybricks.tools import wait
 from lib.CNATMake_lib import CNATMAKER_Bot
 
 robo = CNATMAKER_Bot()
+robo.configurar_hardware_automatico()
+robo.atuador.led.cor(Color.CYAN)
 
-robo.adicionar_sensor_cor_local("cor", Port.D)
-robo.adicionar_sensor_ultra_local("ultra", Port.C)
+while True:
+    pacote = robo.receber_ble_rapido()
+    if pacote:
+        robo.executar_ble_rapido(pacote)
 
-robo.luz_local(Color.CYAN)
-
-for i in range(10):
-    req = robo.receber_ble()
-    
-    if req == ("solicita_dados",):
-        reflexao = robo.ler_reflexao_local("cor")
-        distancia = robo.ler_distancia_local("ultra")
-        
-        dados = ("hub2_dados", reflexao, distancia, i)
-        robo.enviar_ble(*dados)
-        robo.beep_local(900, 100)
-    
-    wait(500)
-
-robo.luz_local(Color.GREEN)
+    robo.transmitir_stream_sensores()
+    wait(1)

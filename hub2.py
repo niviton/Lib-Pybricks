@@ -1,4 +1,4 @@
-"""CLIENTE - Hub 2 (SLAVE)"""
+"""HUB 2 - TEMPLATE OFICIAL (copie e rode)"""
 
 from pybricks.parameters import Color
 from pybricks.tools import wait
@@ -6,19 +6,16 @@ from lib.CNATMake_lib import CNATMAKER_Bot
 
 robo = CNATMAKER_Bot()
 
-# ====== COPIE E COLE SEU CÓDIGO AQUI ======
-# Cole o código do exemplo que quer rodar
-# Exemplo: copiar tudo de exemplos_locais/02_motores.py
+# Detecta automaticamente motores e sensores conectados no Hub 2.
+robo.configurar_hardware_automatico()
+robo.atuador.led.cor(Color.CYAN)
 
-robo.luz_local(Color.BLUE)
-robo.beep_local(800, 100)
+while True:
+    # Executa comandos de atuadores recebidos do Hub 1.
+    pacote = robo.receber_ble_rapido()
+    if pacote:
+        robo.executar_ble_rapido(pacote)
 
-print("Cliente iniciado")
-
-# Seu código aqui
-wait(2000)
-
-robo.luz_local(Color.GREEN)
-
-print("✓ Cliente finalizado")
-       
+    # Publica sensores continuamente para leitura por porta no Hub 1.
+    robo.transmitir_stream_sensores()
+    wait(1)

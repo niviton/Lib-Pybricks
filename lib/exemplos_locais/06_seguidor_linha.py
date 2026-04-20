@@ -1,54 +1,32 @@
-"""
-EXEMPLO 6: Seguidor de Linha com 2 Sensores
-"""
+"""EXEMPLO 6: Seguidor de linha (API nova por porta)"""
 
-from pybricks.parameters import Port, Direction, Color
+from pybricks.parameters import Port, Color
 from pybricks.tools import wait
-
 from lib.CNATMake_lib import CNATMAKER_Bot
 
 robo = CNATMAKER_Bot()
+robo.atuador.movimento.configurar(esq=Port.A, dir=Port.B, cm_por_rotacao=17.5)
 
-# Configurar motores
-robo.adicionar_motor_local("esquerdo", Port.A)
-robo.adicionar_motor_local("direito", Port.B, Direction.COUNTERCLOCKWISE)
+print("Pressione o botao para iniciar")
+robo.esperar_botao()
 
-# Configurar sensores
-robo.adicionar_sensor_cor_local("cor_esq", Port.C)
-robo.adicionar_sensor_cor_local("cor_dir", Port.D)
+for _ in range(300):
+    e = robo.sensor.cor.reflexao(Port.C)
+    d = robo.sensor.cor.reflexao(Port.D)
 
-print("Pressione botão para começar...")
-robo.esperar_botao_local()
-
-robo.luz_local(Color.GREEN)
-
-RAPIDA = 80
-LENTA = 40
-LIMIAR = 50
-
-# Executar por 30 segundos
-for _ in range(600):
-    esq = robo.ler_reflexao_local("cor_esq") < LIMIAR
-    dir = robo.ler_reflexao_local("cor_dir") < LIMIAR
-    
-    # Ambos na linha = reto
-    if esq and dir:
-        robo.motor_local_continuo("esquerdo", RAPIDA)
-        robo.motor_local_continuo("direito", RAPIDA)
-    # Esquerdo na linha = vira direita
-    elif esq:
-        robo.motor_local_continuo("esquerdo", RAPIDA)
-        robo.motor_local_continuo("direito", LENTA)
-    # Direito na linha = vira esquerda
-    elif dir:
-        robo.motor_local_continuo("esquerdo", LENTA)
-        robo.motor_local_continuo("direito", RAPIDA)
-    # Nenhum na linha = para
+    if e < 50 and d < 50:
+        robo.atuador.movimento.arrancar(sentido="frente", potencia=70)
+    elif e < 50:
+        robo.atuador.motor.arrancar(Port.A, sentido="horario", potencia=70)
+        robo.atuador.motor.arrancar(Port.B, sentido="horario", potencia=40)
+    elif d < 50:
+        robo.atuador.motor.arrancar(Port.A, sentido="horario", potencia=40)
+        robo.atuador.motor.arrancar(Port.B, sentido="horario", potencia=70)
     else:
-        robo.parar_todos_motores_local()
-    
-    wait(50)
+        robo.atuador.movimento.parar()
 
-robo.parar_todos_motores_local()
-robo.luz_local(Color.RED)
-print("✓ Concluído")
+    wait(40)
+
+robo.atuador.movimento.parar()
+robo.atuador.led.cor(Color.RED)
+print("✓ Exemplo 6 finalizado")

@@ -1,25 +1,21 @@
-"""R2 - Controlador de motor"""
+"""R2 - Controle de motor remoto por porta"""
 
 from pybricks.parameters import Color
 from pybricks.tools import wait
-
 from lib.CNATMake_lib import CNATMAKER_Bot
 
 robo = CNATMAKER_Bot()
+robo.atuador.led.cor(Color.YELLOW)
 
-robo.luz_local(Color.YELLOW)
+robo.hub_configurar_porta("C2", "motor")
 
-comandos = [
-    ("motor", "graus", 90, 400),
-    ("motor", "cm", 10, 300),
-    ("motor", "continuo", 500, 2),
-    ("motor", "para", 0, 0),
-]
+robo.atuador.motor.girar("C2", sentido="horario", rotacoes=1, potencia=80)
+wait(500)
+robo.atuador.motor.girar("C2", sentido="anti_horario", rotacoes=0.5, potencia=80)
+wait(500)
+robo.atuador.motor.arrancar("C2", sentido="horario", potencia=60)
+wait(1200)
+robo.atuador.motor.parar("C2")
 
-for cmd in comandos:
-    robo.enviar_ble(*cmd)
-    robo.beep_local(800, 150)
-    wait(1000)
-
-robo.luz_local(Color.GREEN)
-print("\n✓ Sequência de controle enviada!")
+robo.atuador.led.cor(Color.GREEN)
+print("✓ Sequencia remota finalizada")

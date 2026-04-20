@@ -1,17 +1,15 @@
-"""R1 - Transmissor de contador"""
+"""R1 - Comunicacao basica (Hub 1 envia)"""
 
 from pybricks.parameters import Color
 from pybricks.tools import wait
 from lib.CNATMake_lib import CNATMAKER_Bot
 
 robo = CNATMAKER_Bot()
-
-robo.luz_local(Color.YELLOW)
+robo.atuador.led.cor(Color.YELLOW)
 
 for i in range(10):
-    msg = ("contador", i, "segundos")
-    robo.enviar_ble(*msg)
-    robo.beep_local(800, 100)
-    wait(1000)
+    robo.enviar_ble("contador", i)
+    robo.atuador.som.beep(frequencia=800, duracao=80)
+    wait(600)
 
-robo.luz_local(Color.GREEN)
+robo.atuador.led.cor(Color.GREEN)

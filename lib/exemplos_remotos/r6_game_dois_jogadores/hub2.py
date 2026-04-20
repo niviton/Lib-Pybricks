@@ -1,38 +1,30 @@
-"""R6 - Jogador 2"""
+"""R6 - Jogo 2 jogadores (Hub 2)"""
 
 from pybricks.parameters import Color
 from pybricks.tools import wait, StopWatch
 from lib.CNATMake_lib import CNATMAKER_Bot
 
 robo = CNATMAKER_Bot()
-
-input("Pressione ENTER para começar...")
-
-robo.luz_local(Color.YELLOW)
-robo.beep_local(800, 100)
+robo.esperar_botao()
+robo.atuador.led.cor(Color.YELLOW)
+robo.atuador.som.beep(frequencia=800, duracao=100)
 
 timer = StopWatch()
 contador = 0
-tempo_limite = 10000
-placar_p1 = None
+placar_h1 = 0
 
-def verificar_vencedor():
-    global placar_p1
-    try:
-        msg = robo.receber_ble()
-        if msg[0] == "botao":
-            placar_p1 = msg[1]
-    except:
-        pass
+while timer.time() < 10000:
+    msg = robo.receber_ble()
+    if msg and len(msg) >= 2 and msg[0] == "placar_h1":
+        placar_h1 = msg[1]
 
-while timer.time() < tempo_limite:
-    verificar_vencedor()
-    
-    if robo.botao_pressionado_local():
+    if robo.hub.botao.pressionado():
         contador += 1
-        robo.enviar_ble("botao", contador, timer.time())
-        robo.beep_local(1000, 100)
-        wait(300)
+        robo.enviar_ble("placar_h2", contador)
+        robo.atuador.som.beep(frequencia=1000, duracao=80)
+        wait(250)
 
-tempo_final = timer.time() / 1000.0
-robo.luz_local(Color.GREEN)
+    wait(20)
+
+robo.atuador.led.cor(Color.GREEN)
+print("Pontos H2:", contador, "| Ultimo placar H1:", placar_h1)

@@ -1,4 +1,4 @@
-"""R3 - Hub 2 multiplexador automatico de sensores"""
+"""R0 - API nova completa (Hub 2 multiplexador)"""
 
 from pybricks.parameters import Color
 from pybricks.tools import wait

@@ -1,16 +1,22 @@
-"""R1 - Receptor simples"""
+"""R1 - Comunicacao basica (Hub 2 recebe)"""
 
 from pybricks.parameters import Color
 from pybricks.tools import wait
 from lib.CNATMake_lib import CNATMAKER_Bot
 
 robo = CNATMAKER_Bot()
+robo.atuador.led.cor(Color.CYAN)
 
-robo.luz_local(Color.CYAN)
-
-for i in range(10):
+recebidos = 0
+while recebidos < 10:
     msg = robo.receber_ble()
-    robo.beep_local(1000, 100)
-    wait(100)
+    if not msg:
+        wait(50)
+        continue
 
-robo.luz_local(Color.GREEN)
+    if len(msg) >= 2 and msg[0] == "contador":
+        print("Recebi:", msg)
+        robo.atuador.som.beep(frequencia=1000, duracao=80)
+        recebidos += 1
+
+robo.atuador.led.cor(Color.GREEN)

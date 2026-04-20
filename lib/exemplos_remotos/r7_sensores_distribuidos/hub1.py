@@ -1,26 +1,19 @@
-"""R7 - Agregador de dados"""
+"""R7 - Hub 1 agrega sensores remotos por porta"""
 
 from pybricks.parameters import Color
 from pybricks.tools import wait
-
 from lib.CNATMake_lib import CNATMAKER_Bot
 
 robo = CNATMAKER_Bot()
+robo.atuador.led.cor(Color.YELLOW)
 
-robo.luz_local(Color.YELLOW)
+robo.sensor.cor.configurar("A2")
+robo.sensor.distancia.configurar("C2")
 
-tempo_coleta = 10
-dentro = 0
+for _ in range(40):
+    r = robo.sensor.cor.reflexao("A2")
+    d = robo.sensor.distancia.ler("C2")
+    print("A2:", r, "| C2:", d)
+    wait(100)
 
-while dentro < tempo_coleta:
-    robo.enviar_ble("solicita_dados")
-    
-    try:
-        dados_hub2 = robo.receber_ble()
-    except:
-        pass
-    
-    wait(1000)
-    dentro += 1
-
-robo.luz_local(Color.GREEN)
+robo.atuador.led.cor(Color.GREEN)

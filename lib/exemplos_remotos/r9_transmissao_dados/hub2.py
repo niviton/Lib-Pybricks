@@ -1,27 +1,23 @@
-"""R9 - Receptor avançado"""
+"""R9 - Transmissao de dados com ACK (Hub 2)"""
 
 from pybricks.parameters import Color
 from pybricks.tools import wait
-
 from lib.CNATMake_lib import CNATMAKER_Bot
 
 robo = CNATMAKER_Bot()
+robo.atuador.led.cor(Color.CYAN)
 
-robo.luz_local(Color.CYAN)
-
-recebidos = []
 for i in range(4):
     msg = robo.receber_ble()
-    tipo = msg[0]
-    
-    if tipo in ("sensor", "status"):
-        recebidos.append(msg)
-        robo.enviar_ble("ack", i)
-        robo.luz_local(Color.GREEN)
-        robo.beep_local(1000, 100)
-    else:
-        robo.luz_local(Color.ORANGE)
-    
-    wait(500)
+    if not msg:
+        wait(50)
+        continue
 
-robo.luz_local(Color.GREEN)
+    print("Recebido:", msg)
+    robo.enviar_ble("ack", i)
+    robo.atuador.som.beep(frequencia=1000, duracao=80)
+    robo.atuador.led.cor(Color.GREEN)
+    wait(200)
+    robo.atuador.led.cor(Color.CYAN)
+
+robo.atuador.led.cor(Color.GREEN)

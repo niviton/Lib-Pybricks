@@ -1,4 +1,3 @@
-"""SERVIDOR - Hub 1 (MASTER)"""
 
 from pybricks.parameters import Color
 from pybricks.tools import wait
@@ -6,15 +5,18 @@ from lib.CNATMake_lib import CNATMAKER_Bot
 
 robo = CNATMAKER_Bot()
 
-# ====== COPIE E COLE SEU CÓDIGO AQUI ======
-# Cole o código do exemplo que quer rodar
-# Exemplo: copiar tudo de exemplos_locais/01_led_e_som.py
+robo.atuador.led.cor(Color.YELLOW)
 
-# Mostrar no display
+robo.hub_configurar_porta("C2", "motor")
 
-robo.esperar_botao_local()
-robo.limpar_display_local()
+robo.atuador.motor.girar("C2", sentido="horario", rotacoes=1, potencia=80)
+wait(5000)
+robo.atuador.motor.girar("C2", sentido="anti_horario", rotacoes=0.5, potencia=80)
+wait(5000)
+robo.atuador.motor.arrancar("C2", sentido="horario", potencia=60)
+wait(5000)
+robo.atuador.motor.parar("C2")
+wait(5000)
 
-robo.luz_local(Color.GREEN)
-
-print("✓ Servidor finalizado")
+robo.atuador.led.cor(Color.GREEN)
+print("✓ Sequencia remota finalizada")
